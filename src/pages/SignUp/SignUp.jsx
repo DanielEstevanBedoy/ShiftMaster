@@ -47,9 +47,7 @@ function SignUpPage() {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Create a free account
             </h1>
-            <p className="mb-16 text-xl text-black tracking-tight">
-              Use and re-use tons of responsive sections to create the perfect layout. Sections are ready.
-            </p>
+         
             <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
               <input
                 className="w-full p-4 text-black tracking-tight bg-white placeholder-gray-400 outline-none border border-gray-300 rounded-lg focus:border-indigo-500 transition duration-200"
