@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
+
+
 
 function SignUpPage() {
   const [firstName, setFirstName] = useState('');
@@ -7,6 +11,10 @@ function SignUpPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
+
+  const navigate = useNavigate(); // We will use this to redirect after successful signup
+
+
 
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);
@@ -31,7 +39,42 @@ function SignUpPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Perform form submission logic here
+    if (password !== confirmPassword) {
+      alert('Passwords do not match!');
+      return;
+    }
+
+
+
+    const auth = getAuth();
+
+    createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+
+    // add to database
+    const db = getDatabase();
+    set(ref(db, 'users/' + user.uid), {
+      firstName: firstName,
+      email: user.email,
+      uid: user.uid,
+    }).then(() => {
+      // handle successful registration, such as redirecting the user to a dashboard page
+      navigate("/dashboard"); 
+    })
+    .catch((error) => {
+      console.error("Error writing to database: ", error);
+    });
+
+    })
+    .catch((error) => {
+    // const errorCode = error.code;
+    const errorMessage = error.message;
+    // show error to user
+    alert(`Error: ${errorMessage}`);
+    });
+
     // You can access form data using the state values (firstName, email, password, etc.)
   };
 

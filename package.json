@@ -7,6 +7,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@devexpress/dx-react-core": "^4.0.5",
+    "@devexpress/dx-react-scheduler": "^4.0.5",
+    "@devexpress/dx-react-scheduler-material-ui": "^4.0.5",
     "@tailwindcss/forms": "^0.5.3",
     "chart.js": "^4.3.0",
     "chartjs-adapter-moment": "^1.0.1",
@@ -17,7 +20,8 @@
     "react-flatpickr": "^3.10.13",
     "react-router": "^6.14.1",
     "react-router-dom": "^6.11.2",
-    "react-transition-group": "^4.4.5"
+    "react-transition-group": "^4.4.5",
+    "use-history": "^1.4.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^3.1.0",

@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import  { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Transition from '../utils/Transition';
-
+import { getAuth, signOut } from 'firebase/auth';
 import UserAvatar from '../images/user-avatar-32.png';
 
 function DropdownProfile({
@@ -13,6 +13,15 @@ function DropdownProfile({
   const trigger = useRef(null);
   const dropdown = useRef(null);
 
+  const handleSignOut = async () => {
+    const auth = getAuth();
+    try {
+      await signOut(auth);
+      setDropdownOpen(!dropdownOpen);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }) => {
@@ -85,7 +94,7 @@ function DropdownProfile({
               <Link
                 className="font-medium text-sm text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center py-1 px-3"
                 to="/signin"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
+                onClick={handleSignOut}
               >
                 Sign Out
               </Link>
