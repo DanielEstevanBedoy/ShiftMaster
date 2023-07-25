@@ -13,7 +13,7 @@ import './charts/ChartjsConfig';
 import Dashboard from './pages/Dashboard';
 import SignUpPage from './pages/SignUp/SignUp';
 import SignInPage from './pages/SignIn/SignIn';
-import SchedulePage from './pages/Schedule/SchedulePage';
+import SchedulePage from './pages/Schedule/tempPage';
 
 function App() {
 
@@ -28,10 +28,11 @@ function App() {
   return (
     <>
       <Routes>
-        <Route exact path = "/dashboard" element = {<Dashboard/>}/>
+        <Route exact path = "/" element = {<Dashboard/>}/>
         <Route path ="/signup" element={<SignUpPage/>}/>
         <Route path = "/signin" element={<SignInPage/>}/>
-        { <Route path ="/schedulepage" element ={<SchedulePage/>}/> }
+        <Route exact path = 'schedule/:companyId' element = {<SchedulePage/>}/>
+        // {/* { <Route path ="/schedulepage" element ={<Schedule/>}/> } */}
 
       </Routes>
     </>
