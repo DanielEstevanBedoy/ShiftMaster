@@ -5,6 +5,7 @@ import Datepicker from '../components/Datepicker';
 import {database} from "../firebase";
 import {Link} from "react-router-dom";
 import { ref, onValue, push, set, off, remove } from "firebase/database";
+import { getAuth } from 'firebase/auth';
 
 
 // import DashboardCard01 from '../partials/dashboard/DashboardCard01';
@@ -12,41 +13,77 @@ import { ref, onValue, push, set, off, remove } from "firebase/database";
 // import DashboardCard03 from '../partials/dashboard/DashboardCard03';
 
 
-function Dashboard() {
-
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+function Dashboard({user}) {
+const [sidebarOpen, setSidebarOpen] = useState(false);
   const [companies, setCompanies] = useState([]);
   const [newCompanyName, setNewCompanyName] = useState('');
+  const [userId, setUserId] = useState(null);
 
 
   useEffect(() => {
-    const companiesRef = ref(database, 'companies');
-    const listener = onValue(companiesRef, (snapshot) => {
-      const companiesData = snapshot.val();
-      const companiesArray = companiesData ? Object.values(companiesData) : [];
-      setCompanies(companiesArray);
-    });
-  
-    return () => off(companiesRef, listener);
+    const auth = getAuth();
+    const user = auth.currentUser;
+    
+    if (user) {
+      setUserId(user.uid);
+    }
   }, []);
 
-  const handleAddCompany = () => {
-    const newCompanyRef = push(ref(database, 'companies'));
-    set(newCompanyRef, {
-      id: newCompanyRef.key,
-      name: newCompanyName,
-    });
 
-    setNewCompanyName('');
+
+
+
+
+  useEffect(() => {
+    if (user) {
+      const companiesRef = ref(database, `users/${user.uid}/companies`);
+      const listener = onValue(companiesRef, (snapshot) => {
+        const companiesData = snapshot.val();
+        const companiesArray = companiesData ? Object.values(companiesData) : [];
+        setCompanies(companiesArray);
+      });
+  
+      return () => off(companiesRef, listener);
+    }
+  }, [user]);
+  
+
+
+
+
+
+  useEffect(() => {
+    if (user) {
+      const companiesRef = ref(database, `users/${user.uid}/companies`);
+      const listener = onValue(companiesRef, (snapshot) => {
+        const companiesData = snapshot.val();
+        const companiesArray = companiesData ? Object.values(companiesData) : [];
+        setCompanies(companiesArray);
+      });
+  
+      return () => off(companiesRef, listener);
+    }
+  }, [user]);
+  
+
+  const handleAddCompany = () => {
+    if (userId) {
+      const newCompanyRef = push(ref(database, `users/${userId}/companies`));
+      set(newCompanyRef, {
+        id: newCompanyRef.key,
+        name: newCompanyName,
+      });
+
+      setNewCompanyName('');
+    }
   };
 
-  const handleDeleteCompany = (companyId) =>{
-
-    const companyRef = ref(database, `companies/${companyId}`);
+  const handleDeleteCompany = (companyId) => {
+    
+    const companyRef = ref(database, `users/${user.uid}/companies/${companyId}`);
     remove(companyRef);
-
-  }
-
+  };
+  
 
 
 

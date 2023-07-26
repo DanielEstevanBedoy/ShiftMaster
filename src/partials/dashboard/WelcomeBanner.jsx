@@ -1,6 +1,34 @@
-import React from 'react';
+import {useState, useEffect} from 'react';
+import { getDatabase,ref, onValue } from 'firebase/database';
+import {getAuth} from 'firebase/auth';
+
+
+
 
 function WelcomeBanner() {
+  const [firstName, setFirstName] = useState(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        const db = getDatabase();
+        const firstNameRef = ref(db, 'users/' + user.uid + '/firstName');
+        onValue(firstNameRef, (snapshot) => {
+          const rawName = snapshot.val();
+          const capitalizedName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+          setFirstName(capitalizedName);
+        });
+      }
+    });
+    
+    // Clean up subscription on unmount
+    return () => unsubscribe();
+  }, []);
+
+
+
+
   return (
     <div className="relative bg-indigo-200 dark:bg-indigo-500 p-4 sm:p-6 rounded-sm overflow-hidden mb-8">
       {/* Background illustration */}
@@ -47,7 +75,8 @@ function WelcomeBanner() {
 
       {/* Content */}
       <div className="relative">
-        <h1 className="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1">Good afternoon, Daniel 👋</h1>
+        <h1 className="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1">Good afternoon, {firstName ? firstName : 'Loading...'}
+ 👋</h1>
         <p className="dark:text-indigo-200">Let's see what's happening with your schedules this week:</p>
       </div>
     </div>

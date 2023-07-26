@@ -10,7 +10,6 @@ function SignUpPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [agreeTerms, setAgreeTerms] = useState(false);
 
   const navigate = useNavigate(); // We will use this to redirect after successful signup
 
@@ -32,9 +31,7 @@ function SignUpPage() {
     setConfirmPassword(e.target.value);
   };
 
-  const handleAgreeTermsChange = (e) => {
-    setAgreeTerms(e.target.checked);
-  };
+ 
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -83,7 +80,7 @@ function SignUpPage() {
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
           <img className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo" />
-          Schedule.io
+          ShiftMaster
         </a>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -120,33 +117,16 @@ function SignUpPage() {
                 value={confirmPassword}
                 onChange={handleConfirmPasswordChange}
               />
-              <div className="relative flex p-px bg-transparent overflow-hidden rounded-lg mb-6">
-                <input
-                  className="form-input opacity-0 absolute top-px z-10 h-5 w-5"
-                  type="checkbox"
-                  name="confirm"
-                  value="yes"
-                  checked={agreeTerms}
-                  onChange={handleAgreeTermsChange}
-                />
-                <div className="mr-2.5 text-transparent border border-gray-500 w-5 h-5 relative top-px flex justify-center items-center rounded">
-                  <svg className="w-2.5 h-2.5" width="9" height="7" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0.604248 3.77081L2.68758 5.85415L7.89591 0.645813" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </div>
-                <label className="select-none text-gray-400 tracking-tight">
-                  <span>I agree to the</span>
-                  <a className="text-black hover:text-gray-700" href="#">
-                    Terms &amp; Conditions &amp; Privacy Policy
-                  </a>
-                </label>
-              </div>
+             
               <button
                 className="mb-7 px-5 py-4 w-full text-white text-center font-semibold tracking-tight bg-indigo-500 hover:bg-indigo-600 rounded-lg focus:ring-4 focus:ring-indigo-300 transition duration-200"
                 type="submit"
               >
                 Create Free Account
               </button>
+
+
+
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{' '}
                 <Link to="/signin" className="font-medium text-primary-600 hover:underline dark:text-primary-500">

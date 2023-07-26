@@ -3,10 +3,14 @@ import { Link } from 'react-router-dom';
 import Transition from '../utils/Transition';
 import { getAuth, signOut } from 'firebase/auth';
 import UserAvatar from '../images/user-avatar-32.png';
+import { getDatabase,ref, onValue } from 'firebase/database';
 
 function DropdownProfile({
   align
 }) {
+
+  const [firstName, setFirstName] = useState(null);
+
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -22,6 +26,28 @@ function DropdownProfile({
       console.error(error);
     }
   };
+
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        const db = getDatabase();
+        const firstNameRef = ref(db, 'users/' + user.uid + '/firstName');
+        onValue(firstNameRef, (snapshot) => {
+          const rawName = snapshot.val();
+          const capitalizedName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+          setFirstName(capitalizedName);
+        });
+      }
+    });
+    
+    // Clean up subscription on unmount
+    return () => unsubscribe();
+  }, []);
+  
+
+
   // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }) => {
@@ -32,6 +58,7 @@ function DropdownProfile({
     document.addEventListener('click', clickHandler);
     return () => document.removeEventListener('click', clickHandler);
   });
+  
 
   // close if the esc key is pressed
   useEffect(() => {
@@ -54,7 +81,9 @@ function DropdownProfile({
       >
         <img className="w-8 h-8 rounded-full" src={UserAvatar} width="32" height="32" alt="User" />
         <div className="flex items-center truncate">
-          <span className="truncate ml-2 text-sm font-medium dark:text-slate-300 group-hover:text-slate-800 dark:group-hover:text-slate-200">Acme Inc.</span>
+          <span className="truncate ml-2 text-sm font-medium dark:text-slate-300 group-hover:text-slate-800 dark:group-hover:text-slate-200">
+          {firstName ? firstName : 'Loading...'}
+          </span>
           <svg className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400" viewBox="0 0 12 12">
             <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
           </svg>
@@ -77,7 +106,6 @@ function DropdownProfile({
           onBlur={() => setDropdownOpen(false)}
         >
           <div className="pt-0.5 pb-2 px-3 mb-1 border-b border-slate-200 dark:border-slate-700">
-            <div className="font-medium text-slate-800 dark:text-slate-100">Acme Inc.</div>
             <div className="text-xs text-slate-500 dark:text-slate-400 italic">Administrator</div>
           </div>
           <ul>
