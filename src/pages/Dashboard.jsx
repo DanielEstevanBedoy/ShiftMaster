@@ -47,36 +47,23 @@ const [sidebarOpen, setSidebarOpen] = useState(false);
     }
   }, [user]);
   
-
-
-
-
-
-  useEffect(() => {
-    if (user) {
-      const companiesRef = ref(database, `users/${user.uid}/companies`);
-      const listener = onValue(companiesRef, (snapshot) => {
-        const companiesData = snapshot.val();
-        const companiesArray = companiesData ? Object.values(companiesData) : [];
-        setCompanies(companiesArray);
-      });
-  
-      return () => off(companiesRef, listener);
-    }
-  }, [user]);
   
 
-  const handleAddCompany = () => {
+  const handleAddCompany = (event) => {
+    event.preventDefault(); // This line prevents the form from causing a page refresh.
+    
     if (userId) {
       const newCompanyRef = push(ref(database, `users/${userId}/companies`));
+      console.log("new company created");
       set(newCompanyRef, {
         id: newCompanyRef.key,
         name: newCompanyName,
       });
-
+  
       setNewCompanyName('');
     }
   };
+  
 
   const handleDeleteCompany = (companyId) => {
     
@@ -166,7 +153,7 @@ function CompanyCard({ company, onDelete }) {
     <div className="bg-white p-4 rounded-lg shadow">
       <h2 className="font-bold text-xl">{company.name}</h2>
       <div className="flex justify-between items-center mt-4">
-        <Link to={`/schedule/${company.id}`} className="text-blue-500">View Schedule</Link>
+      <Link to={`/schedule/${company.id}`} className="text-blue-500">View Schedule</Link>
         <button onClick={onDelete} className="py-2 px-4 bg-red-500 text-white rounded-lg">Delete</button>
       </div>
     </div>

@@ -8,9 +8,13 @@ import './charts/ChartjsConfig';
 import Dashboard from './pages/Dashboard';
 import SignUpPage from './pages/SignUp/SignUp';
 import SignInPage from './pages/SignIn/SignIn';
-import SchedulePage from './pages/Schedule/tempPage';
+import SchedulePage from './pages/Schedule/SchedulePage';
 import Album from './pages/landingPage';
 import Forgot from './pages/SignIn/forgotPass';
+import CreateNewSchedulePage from './pages/Schedule/createNewSchedule';
+import ModifyCurrentSchedulePage from './pages/Schedule/modifyCurrentSchedule';
+import Exmployees from './pages/Schedule/Employees';
+import NextWeekSchedulePage from './pages/Schedule/nextWeekSchedule';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -49,7 +53,12 @@ function App() {
         <Route path ="/signup" element={<SignUpPage/>}/>
         <Route path = "/signin" element={<SignInPage/>}/>
         <Route path = "/forgot" element = {<Forgot/>}/>
-        <Route exact path = 'schedule/:companyId' element = {<SchedulePage/>}/>
+        <Route exact path='/schedule/:companyId' element={<SchedulePage />} />
+        <Route path='/schedule/:companyId/create-new-schedule' element={<CreateNewSchedulePage />} />
+        <Route path='/schedule/:companyId/modify-current-schedule' element={<ModifyCurrentSchedulePage />} />
+        <Route path='/schedule/:companyId/employees' element={<Exmployees />} />
+        <Route path='/schedule/:companyId/next-week-schedule' element={<NextWeekSchedulePage />} />
+
 
       </Routes>
     </>
